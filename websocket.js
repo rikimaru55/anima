@@ -31,7 +31,7 @@ function notifyOtherPlayers(type, messageBody)
 
 function notifyOtherPlayersInTheRoom(type, messageBody, room)
 {
-    redisClient.KEYS('');
+    otherPlayers = redisClient.SMEMBERS(room);
 }
 
 function updatePlayerAction(playerId, action)
@@ -42,7 +42,7 @@ function updatePlayerAction(playerId, action)
 
 function updatePlayerRoom(playerId, room)
 {
-    redisClient.SETEX(playerId+ROOM_KEY, SECONDS_IN_DAY, room);
+    redisClient.SADD(room, playerId);
 }
 
 //Initialize
@@ -67,7 +67,7 @@ wss.on('connection', ws => {
                     updatePlayerAction(messageObject.playerId, messageObject.action);
                     break;
                 case 'roomChange':
-
+                    updatePlayerRoom(messageObject.playerId, messageObject.room);
                     break;
                 default:
                     console.log('Unknown message type', messageObject.type)
