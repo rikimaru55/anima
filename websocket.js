@@ -4,8 +4,8 @@ const uuidv1 = require('uuid/v1');
 const redis = require('redis');
 
 //Variables
-const wss = new WebSocket.Server({port:8181});
-const redisClient = redis.createClient();
+const wss = new WebSocket.Server({port:80});
+const redisClient = redis.createClient({host: '172.18.0.2'});
 let connections = [];
 let connectionsByPlayerId = {};
 const ACTION_KEY = '_ACTION';
